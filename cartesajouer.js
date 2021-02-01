@@ -56,6 +56,7 @@ const jeu = [
 
 var coordonnees = [];
 var cartes_a_modifier = [["nom", 0]];
+var cartes_a_remodifier = [["nom", 0]];
 var carte_ajoutee = []
 var carte_affichee = [];
 var carte_retournee = []
@@ -94,6 +95,9 @@ function retournerCarteVerso(nom){
         carte_retournee.push(nom);
         console.log("carte retournée: ", carte_retournee);
       }
+      if (!cartes_a_modifier.includes(nom)){
+        cartes_a_modifier.push(nom+"_verso");
+      }
       //console.log("Carte",nom," retournée au verso");
       retirer_de_la_liste(carte_affichee, nom);
     }
@@ -101,16 +105,22 @@ function retournerCarteVerso(nom){
 }
 
 function retournerCarteRecto(nom){
-  if(carte_retournee.includes(nom)){
-    let verso = document.getElementById(nom+"_verso");
-    let carte = document.createElement("img");
-    carte.id = nom;
-    carte.src = chemin_vers_cartes + nom +".gif"
-    carte.alt = nom;
-    verso.parentNode.replaceChild(carte, verso);
-    //console.log("Carte retournée au recto");
-    retirer_de_la_liste(carte_retournee, nom);
-    
+  let face = nom.split('_')[0]+'_'+nom.split('_')[1];
+  console.log(face);
+  if (etape == "second_tirage"){
+    if(carte_retournee.includes(face)){
+      let verso = document.getElementById(face+"_verso");
+      let de_carte = document.createElement("img");
+      de_carte.id = face;
+      de_carte.src = chemin_vers_cartes + face +".gif"
+      de_carte.alt = face;
+      document.getElementById("cartes").replaceChild(de_carte, verso);
+      //console.log("Carte retournée au recto");
+      retirer_de_la_liste(carte_retournee, face);
+      retirer_de_la_liste(cartes_a_modifier, face);
+      retirer_de_la_liste(cartes_a_remodifier, nom);
+      carte_affichee.push(face);
+    }
   }
 }
 
@@ -172,7 +182,7 @@ function mainIsQuinteFlush(){
     let mainIsQuinteFlush = false;
     if (mainIsCouleur()[0] && mainIsQuinte()[0]){
       console.log("Vous avez une Quinte Flush!!! C'est la main la plus forte!!!")
-      text_victoire = "Vous avez une <strong>Quinte Flush</strong>!!! C'est la main la plus forte!!!"
+      text_victoire = "Vous avez une Quinte Flush!!! C'est la main la plus forte!!!"
       mainIsQuinteFlush = true;
     }
     console.log("La main est une quinte flush: ", mainIsQuinteFlush);
@@ -182,7 +192,7 @@ function mainIsQuinteFlush(){
 
 function mainIsCarre(){
   let text_victoire = "";
-  /**On pourrait améliorer à l'aide des fonctions paires et double pair en récupérant les indices */
+  /**On pourrait améliorer à l'aide des fonctions paires et double paire mais flemme */
   if (etape=="second_tirage"){
     let isCarre = false;
     let premier = carte_affichee[0][0]+carte_affichee[0][1];
@@ -196,7 +206,7 @@ function mainIsCarre(){
       || (premier == troisieme == quatrieme == cinquieme)
       || (deuxieme == troisieme == quatrieme == cinquieme)){
         isCarre = true;
-        text_victoire = "Vous avez un <strong>Carré</strong>! C'est la 2eme main la plus forte!";
+        text_victoire = "Vous avez un Carré! C'est la 2eme main la plus forte!";
       }
     console.log("La main est un carré: ", isCarre);
     return [isCarre, text_victoire];
@@ -206,28 +216,18 @@ function mainIsFull(){
   let text_victoire = "";
   let isFull = false;
   if (etape=="second_tirage"){
-    
-    let premier = carte_affichee[0][0]+carte_affichee[0][1];
-    let deuxieme = carte_affichee[1][0]+carte_affichee[1][1];
-    let troisieme = carte_affichee[2][0]+carte_affichee[2][1];
-    let quatrieme = carte_affichee[3][0]+carte_affichee[3][1];
-    let cinquieme = carte_affichee[4][0]+carte_affichee[4][1];
-    if (((premier == deuxieme == troisieme) && (quatrieme = cinquieme))
-    || ((premier == deuxieme == quatrieme) && (troisieme == cinquieme))
-    || ((premier == deuxieme == cinquieme) && (troisieme == quatrieme))
-    || ((premier == troisieme == quatrieme) && (deuxieme == cinquieme))
-    || ((premier == troisieme == cinquieme) && (deuxieme == quatrieme))
-    || ((deuxieme == troisieme == quatrieme) && (premier ==cinquieme))
-    || ((deuxieme == troisieme == cinquieme) && (premier == quatrieme))
-    || ((deuxieme == quatrieme == cinquieme) && (premier == troisieme))
-    || ((troisieme == quatrieme == cinquieme) && (premier == deuxieme))
-    || ((premier == quatrieme == cinquieme) && (deuxieme == troisieme))){
-      isFull = true;
-      text_victoire = "Vous avez un <strong>Full</strong>! C'est la 3eme main la plus forte!";
+
+    if (mainIsBrelan()[0]){
+      let premier = mainIsPaire()[2][0];
+      if (mainIsDoublePaire()[0]){
+        let deuxieme = mainIsPaire()[2][1];
+        isFull = true;
+        text_victoire = "Vous avez un Full! C'est la 3eme main la plus forte!";
+      }
     }
     console.log("La main est un Full: ", isFull);
+    return [isFull, text_victoire];
   }
-  return [isFull, text_victoire];
 }
 
 function mainIsCouleur(){
@@ -240,7 +240,7 @@ function mainIsCouleur(){
     }
   });
   if (isCouleur){
-    text_victoire = "Vous avez une <strong>Couleur</strong>! C'est la 4ème main la plus forte!";
+    text_victoire = "Vous avez une Couleur! C'est la 4ème main la plus forte!";
   }
   console.log("La main est une couleur: ", isCouleur);
   return [isCouleur, text_victoire];
@@ -264,7 +264,7 @@ function mainIsQuinte(){
     }
   }
   if (isQuinte){
-    text_victoire = "Vous avez une <strong>Quinte</strong>! C'est la 5ème main la plus forte!";
+    text_victoire = "Vous avez une Quinte! C'est la 5ème main la plus forte!";
   }
   console.log("La main est une quinte: ", isQuinte);
   return [isQuinte, text_victoire];
@@ -273,24 +273,39 @@ function mainIsQuinte(){
 function mainIsBrelan(){
   let text_victoire = "";
   let isBrelan = false;
-  let premier = carte_affichee[0][0]+carte_affichee[0][1];
-  let deuxieme = carte_affichee[1][0]+carte_affichee[1][1];
-  let troisieme = carte_affichee[2][0]+carte_affichee[2][1];
-  let quatrieme = carte_affichee[3][0]+carte_affichee[3][1];
-  let cinquieme = carte_affichee[4][0]+carte_affichee[4][1];
-  if ((premier == deuxieme == troisieme)
-   || (premier == deuxieme == quatrieme)
-   || (premier == deuxieme == cinquieme)
-   || (premier == troisieme == quatrieme)
-   || (premier == troisieme == cinquieme)
-   || (deuxieme == troisieme == quatrieme)
-   || (deuxieme == troisieme == cinquieme)
-   || (troisieme == quatrieme == cinquieme)){
-     isBrelan = true;
-     text_victoire = "Vous avez un <strong>Brelan</strong>! C'est la 6eme main la plus forte!";
-   }
-   console.log('La main est un Brelan: ', isBrelan);
-   return [isBrelan, text_victoire];
+  if (mainIsPaire()[0][0]){
+    let premier = mainIsPaire()[2][0];
+    let compteur = 0;
+    for(let i =0; i<carte_affichee.length; i++){
+      //Si il n'y a qu'une seule paire
+      if (carte_affichee[i][0]+carte_affichee[i][1] == premier){
+        compteur+=1;
+      }
+    
+      if (compteur == 3){
+        isBrelan = true;
+        premier = figures(premier)
+        text_victoire = "Vous avez un Brelan "+ premier + "! C'est la 6eme main la plus forte!";
+      }
+    }
+    if (mainIsPaire()[2].length>1){
+      //Dans le cas où il y a deux paires
+      let deuxieme = mainIsPaire()[2][1];
+      let compteur = 0;
+      for(let i =0; i<carte_affichee.length; i++){
+        if (carte_affichee[i][0]+carte_affichee[i][1] == deuxieme){
+          compteur+=1;
+        }
+      }
+      if (compteur == 3){
+        isBrelan = true;
+        deuxieme = figures(deuxieme);
+        text_victoire = "Vous avez un Brelan "+ deuxieme + "! C'est la 6eme main la plus forte!";
+      }
+    }
+  }
+  console.log('La main est un Brelan: ', isBrelan);
+  return [isBrelan, text_victoire];
 }
 
 function mainIsDoublePaire(){
@@ -298,9 +313,9 @@ function mainIsDoublePaire(){
   let isDoublePaire = false;
   let isPaire = mainIsPaire()[0][0];
   let nombre = mainIsPaire()[0][1];
-  if (nombre==2){
+  if (nombre>=2){
     isDoublePaire = true;
-    text_victoire = "Vous avez une <strong>Double Paire</strong>! C'est la 7eme main la plus forte!";
+    text_victoire = "Vous avez une Double Paire  " + figures(mainIsPaire()[2][0]) + " et " + figures(mainIsPaire()[2][1]) + "! C'est la 7eme main la plus forte!";
   }
   console.log("La main est une double paire: ", isDoublePaire);
   return [isDoublePaire, text_victoire];
@@ -310,6 +325,7 @@ function mainIsPaire(){
   let text_victoire = "";
   let isPaire = false;
   let compteur = 0;
+  let paire_de = [];
   for (let i =0; i<5; i++){
     let premier = carte_affichee[i][0]+carte_affichee[i][1];
     for(let j =0; j<5; j++){
@@ -317,17 +333,38 @@ function mainIsPaire(){
       let deuxieme = carte_affichee[j][0]+carte_affichee[j][1];
         if (premier == deuxieme){
           isPaire = true;
-          text_victoire = "Vous avez une <strong>Paire</strong>! C'est la 8eme main la plus forte!";
+          if (!paire_de.includes(premier)){
+            paire_de.push(premier);
+          } 
+          premier = figures(premier);
+          text_victoire = "Vous avez une Paire " + premier + "! C'est la 8eme main la plus forte!";
           compteur +=1;
-          
+               
         }
       }
     }
   }
+  //console.log(paire_de);
   compteur = Math.round(compteur/2);
-  console.log("nombre de paire: ", compteur);
-  console.log("La main est une paire: ", isPaire);
-  return [[isPaire, compteur], text_victoire];
+  //console.log("nombre de paire: ", compteur);
+  //console.log("La main est une paire: ", isPaire);
+  return [[isPaire, compteur], text_victoire, paire_de];
+}
+
+function figures(premier){
+  if (premier =="12"){
+    premier = "de Dames";
+  }
+  else if (premier == "11"){
+    premier = "de Valets";
+  }
+  else if (premier == "13"){
+    premier = "de Rois";
+  }
+  else if (premier == "01"){
+    premier = "d'As";
+  }
+  return "de " +premier;
 }
 
 function combinaison(){
@@ -348,7 +385,8 @@ function combinaison(){
     text_victoire = mainIsCouleur()[1];
   }
   if (mainIsFull()[0]){
-    text_victoire = mainIsFull()[1];}
+    text_victoire = mainIsFull()[1];
+  }
   if (mainIsCarre()[0]){text_victoire = mainIsCarre()[1];
   }
   if (mainIsQuinteFlush()[0]){
@@ -390,6 +428,7 @@ function lancerPartie(event){
     document.getElementsByTagName("body")[0].appendChild(msg_victoire);
     boutton_jouer.textContent = "Rejouer";
     etape = "premier_tirage";
+    debuggateur();
   } 
 }
 
@@ -398,6 +437,7 @@ function clean_plateau(){
   carte_ajoutee = [];
   carte_retournee = [];
   cartes_a_modifier = [["nom", 0]];
+  cartes_a_remodifier = [["nom", 0]];
   carte_a_tourner = [];
   coordonnees = [];
   carte_affichee = [];
@@ -405,6 +445,7 @@ function clean_plateau(){
   for (let p=0; p<5; p++){
     document.getElementById("cartes").children[0].remove();
   }
+  debuggateur();
 }
 
 function recup_coord(){
@@ -457,14 +498,28 @@ function detection_click(event){
         console.log("carte cliquée: ", id_carte_cliquee);
         if (!cartes_a_modifier.includes(id_carte_cliquee)){
           cartes_a_modifier.push(id_carte_cliquee);
-          //console.log(cartes_a_modifier);
+          cartes_a_modifier.push(id_carte_cliquee+"_verso");
+          console.log("cartes à modifier", cartes_a_modifier);
+          console.log("carte a remodifier", cartes_a_remodifier);
+        }
+        else{
+          //console.log("hello");
+          if (!cartes_a_remodifier.includes(id_carte_cliquee)){
+            cartes_a_remodifier.push(id_carte_cliquee);
+            console.log("cartes à modifier", cartes_a_modifier);
+            console.log("carte a remodifier", cartes_a_remodifier);
+          }
+        }
+      }
+      if (cartes_a_remodifier){
+        for (let i = 1; i<cartes_a_remodifier.length; i++){
+          retournerCarteRecto(cartes_a_remodifier[i]);
         }
       }
       
       if (cartes_a_modifier){
         for (let i = 1; i<cartes_a_modifier.length; i++){
-          retournerCarteVerso(cartes_a_modifier[i]);
-          
+          retournerCarteVerso(cartes_a_modifier[i]); 
         }
         //console.log("cartes à modifier: ", cartes_a_modifier);
       }
@@ -472,14 +527,24 @@ function detection_click(event){
   }
 }
 
+
+/**                            DEBUG */
+
+function debuggateur(){
+  console.log("Liste carte ajoutee",  carte_ajoutee);
+  console.log("Liste carte_affiche: ", carte_affichee);
+  console.log("Liste carte retournee: ", carte_retournee);
+  //console.log("coordonnées: ", coordonnees);
+}
 //  
 /**                                                    TEST */
-/**etape = "second_tirage";
+/** 
+etape = "second_tirage";
 ajouterCarte("09_carreau");
 ajouterCarte("01_pique");
 ajouterCarte("01_trefle");
-ajouterCarte("09_coeur");
-ajouterCarte("05_carreau");
+ajouterCarte("01_coeur");
+ajouterCarte("09_carreau");
 console.log(carte_affichee);
 mainIsCarre();
 mainIsCouleur();
