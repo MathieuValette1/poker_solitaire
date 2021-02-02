@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>jeu de cartes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,100" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lobster+Two" rel="stylesheet">
+    <title>Jeu de cartes</title>
     <link rel="stylesheet" href="theme/style.css"/>
 </head>
 <body>
-    <h1>Jeu de poker solitaire</h1>
-    <button id="jouer">Jouer</button>
-    <div id="cartes"></div>
-    <script  src="cartesajouer.js"></script>
+        <header>
+            <h1> <a href="index.html"> Jeux de plateau</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Acceuil</a></li>
+                    <li><a href="index.html">Contact</a></li>
+                    <li><a href="index.html">Autres jeux</a></li>
+                    
+                </ul>
+            </nav>
+        </header>
+        <h1 id="titre_jeu">Jeu de poker solitaire</h1>
+        <div id="formulaire">
+            <form id="joueur" method="POST" action="cartesajouer.js">
+                <label for="nom">Votre nom</label>: <input type="text" name="nom_joueur" id="nom"/></br>
+                <label for="mise_init">Votre mise initiale</label>: <input type="number" name="mise_init" id="mise_init"/>  
+                <input id="ok" type="submit" value="OK"/>           
+            </form>
+        
+        <button id="jouer">Jouer</button>
+        <div id="cartes"></div>
+        <script  src="cartesajouer.js"></script>
+    </div>
 </body>
 </html>

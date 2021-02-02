@@ -451,10 +451,10 @@ function clean_plateau(){
 function recup_coord(){
   for(let i =0; i<N; i++){
     let abscisse = document.getElementById("cartes").childNodes[i].offsetLeft;
-    let abscisse_max = document.getElementById("cartes").childNodes[i].offsetLeft +60;
+    let abscisse_max = document.getElementById("cartes").childNodes[i].offsetLeft +120;
     //console.log(abscisse, abscisse_max)
     let ordonnee = document.getElementById("cartes").childNodes[i].offsetTop;
-    let ordonnee_max = document.getElementById("cartes").childNodes[i].offsetTop + 90;
+    let ordonnee_max = document.getElementById("cartes").childNodes[i].offsetTop +180;
     //console.log(ordonnee, ordonnee_max);
     coordonnees.push([[abscisse, ordonnee],[abscisse_max, ordonnee_max]]);
     //console.log("coordonnées: ", coordonnees);
@@ -525,6 +525,23 @@ function detection_click(event){
       }
     }
   }
+}
+/**                                 GESTION DES GAINS */
+
+
+
+
+
+boutton_ok = document.getElementById("ok");
+boutton_ok.addEventListener("click", enregistrer_joueur);
+
+function enregistrer_joueur(event){
+  const nom_joueur = document.getElementById("nom").value;
+  const tresor_init = document.getElementById("mise_init");
+  console.log(nom_joueur);
+  console.log(tresor_init);
+  var mise = 0;
+var gains = tresor_init;
 }
 
 

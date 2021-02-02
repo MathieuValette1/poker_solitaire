@@ -1,1 +1,191 @@
-img { width: 60px; height: 90px; padding: 2px 2px 2px 2px; }
+/** GENERAL */
+
+*{box-sizing:border-box;}
+
+body{
+    background-color: rgba(1, 63, 1, 0.651);
+    margin:0;
+    padding: 0;
+    color: rgb(146, 199, 146);
+
+}
+
+h1{
+    font-family: 'Roboto';
+    font-size: 2em;
+}
+
+/** HEADER */
+
+header{ 
+    text-transform:capitalize;
+    background-color: rgb(92, 2, 2);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 50px;
+    padding-left: 50px;
+    height: 100px;
+    display:flex;
+    color:antiquewhite;
+}
+
+body header h1{
+    flex:5.5;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+header nav{
+    flex:2;
+}
+
+header h1 a{
+    text-decoration: none;
+    color:antiquewhite;
+}
+header nav ul{
+    padding:0;
+    margin:0;
+    
+}
+
+header nav li{
+    margin-left: 2px;
+    display:inline-block;
+    list-style: none;
+    
+}
+
+header nav li a{
+    font-family: 'Roboto';
+    text-decoration: none;
+    color:antiquewhite;
+    text-transform: capitalize;
+    font-size: 1.4em;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: solid rgba(255,255,255,0.2)  1px;
+}
+
+header nav li:last-child a{
+    border-right: none;
+}
+
+header nav li a:hover{
+    color:grey;
+}
+
+/** BODY */
+
+div#cartes img { 
+    width: 120px; 
+    height: 180px; 
+    margin-right: 20px;
+} /** SI MODIFICATION, pensez à modifier le script */
+
+div#cartes img { 
+    width: 120px; 
+    height: 180px;
+    margin-right: 20px;
+    margin-left: 100px;
+}
+
+body h1#titre_jeu{
+    font-weight: 300;
+    text-align: center;
+}
+
+form{
+    font-family: "Brush Script MT";
+    font-size: 2em;
+    text-align: center;
+}
+
+input{
+    background-color:rgb(146, 199, 146);
+    color:black;
+    border:0;
+    text-align: center;
+    
+}
+input#ok{
+    background-color: rgb(102, 13, 13);
+    border-radius: 10px;
+    padding:0.5em;
+    font-size: 0.5em;
+    font-family: 'Arial';
+    color:antiquewhite;
+    
+}
+
+input#ok:hover{
+    background-color:antiquewhite;
+    border-radius: 10px;
+    padding:0.5em;
+    font-size: 0.5em;
+    font-family: 'Arial';
+    color:rgb(102, 13, 13);
+}
+
+button#jouer{
+    color:whitesmoke;
+    background-color: darkred;
+    padding: 10px;
+    border-radius: 10px;
+    text-transform: uppercase ;
+    text-emphasis: bold;
+    margin-top: 30px;
+    margin-left: 700px;
+    margin-bottom: 200px;
+    font-size: 2em;
+    
+}
+
+button#jouer:hover{
+    color:darkred;
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 10px;
+    text-transform: uppercase ;
+    text-emphasis: bold;
+    margin-top: 30px;
+    margin-left: 700px;
+    margin-bottom: 50px;
+    font-size: 2em;
+}
+
+button#changer{
+    color:whitesmoke;
+    background-color: darkred;
+    padding: 10px;
+    border-radius: 10px;
+    text-transform: uppercase ;
+    text-emphasis: bold;
+    margin-top: 30px;
+    margin-left: 700px;
+    margin-bottom: 50px;
+    
+}
+
+button#changer:hover{
+    color:darkred;
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 10px;
+    text-transform: uppercase ;
+    text-emphasis: bold;
+    margin-top: 30px;
+    margin-left: 700px;
+    margin-bottom: 50px;
+    
+}
+
+h2{
+    text-align: center;
+    color: antiquewhite;
+    font-family: 'Roboto';
+    font-size: 2em;
+    margin-top: 50px;
+}
